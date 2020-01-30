@@ -3,15 +3,20 @@ import types from "../constants/tasks";
 import * as actions from "../actions/tasks";
 import callApi from "../../utils/call-api";
 
+function createFormForTasks(state) {
+    let sort_field = state.payload && state.payload.sort_field || "id";
+    let sort_direction = state.payload && state.payload.sort_direction || "asc";
+    let page = state.payload && state.payload.page || "1";
+    let form = `&sort_field=${sort_field}&sort_direction=${sort_direction}&page=${page}`;
+    return form;
+}
+
 // get tasks
 function* loadTasks(state) {
     try {
         let form;
         if (!state.isServer) {
-            let sort_field = state.payload && state.payload.sort_field || "id";
-            let sort_direction = state.payload && state.payload.sort_direction || "asc";
-            let page = state.payload && state.payload.page || "1";
-            form = `&sort_field=${sort_field}&sort_direction=${sort_direction}&page=${page}`;
+            form = createFormForTasks(state);
         }
         const data = yield callApi({form, getTasks: true}, null, "/");
         yield put(actions.tasks_success(data));
@@ -40,14 +45,18 @@ function* createTask(state) {
 // edit task
 function* editTask(state) {
     try {
-        const {id, token} = state.payload;
+        const {id, token} = state.payload[0];
         let form = new FormData();
-        if (state.payload.status) {
-            form.append("status", state.payload.status);}
-        if (state.payload.text) {form.append("text", state.payload.text);}
+        if (state.payload[0].status) {
+            form.append("status", state.payload[0].status);}
+        if (state.payload[0].text) {
+            form.append("text", state.payload[0].text);
+        }
+        form.append("token", token);
 
-        const data = yield callApi({status: state.payload.status, token}, {method: "POST"}, `/edit/:${id}`);
+        const data = yield callApi(form, {method: "POST"}, `/edit/${id}`);
         yield put(actions.edit_task_success(data));
+        yield put(actions.tasks_request({...state.payload[1]}));
     } catch (error) {
         yield put(actions.edit_task_failure(error.message));
     }

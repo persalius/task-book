@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { connect } from 'react-redux';
 import "../styles/components/list_item.scss";
+import {getCookie} from "../utils/cookie";
 // action
 import {edit_task_request} from "../redux/actions/tasks";
 
@@ -10,7 +11,10 @@ interface ModalProps {
     token: string,
     openModal: Function,
     dispatch: Function,
-    error?: object | string
+    error?: object | string,
+    sort_field: string | null,
+    sort_direction: string | null,
+    page: number
 }
 
 interface Props {
@@ -21,17 +25,29 @@ interface Props {
     id: number,
     token?: string,
     dispatch?: Function,
-    error?: object | string
+    error?: object | string,
+    sort_field: string | null,
+    sort_direction: string | null,
+    page: number
 }
 
 // Modal window
 const Modal: React.FC<ModalProps> = props => {
     const [viewError, setViewError] = useState(false);
-    const {id, text, token, openModal, dispatch, error} = props;
+    const [isTokenInBrow, setIsTokenInBrow] = useState(false);
+    const textarea = useRef(null);
+    const {id, text, token, openModal, dispatch, error, sort_field, sort_direction, page} = props;
 
-    const changeText = () => {
-        setViewError(true);
-        dispatch(edit_task_request({id, text, token}));
+    const changeText = async() => {
+        const tokenValue = await getCookie("token");
+        if (tokenValue) {
+            localStorage.setItem(`id${id}`, id.toString());
+            setViewError(true);
+            dispatch(edit_task_request([{id, text: textarea.current.value, token}, {sort_field, sort_direction, page}]));
+        } else {
+            setViewError(true);
+            setIsTokenInBrow(true);
+        }
     };
 
     const closeModal = () => {
@@ -43,7 +59,8 @@ const Modal: React.FC<ModalProps> = props => {
         <div className="modal">
             <div className="modal__block">
                 {error && viewError && <p className="error">{error}</p>}
-                <textarea className="modal__text" defaultValue={text}></textarea>
+                {isTokenInBrow && viewError && <p className="error">Пожалуйста авторизуйтесь</p>}
+                <textarea className="modal__text" defaultValue={text} ref={textarea}></textarea>
                 <button className="modal__btn" onClick={changeText}>Применить изменения</button>
                 <div className="modal__close" onClick={closeModal}></div>
             </div>
@@ -54,13 +71,21 @@ const Modal: React.FC<ModalProps> = props => {
 
 const ListItem: React.FC<Props> = props => {
     const [viewModal, setViewModal] = useState(false);
-    const {id, username, email, text, status, token, dispatch, error} = props;
+    const [isAdminChange, setIsAdminChange] = useState(false);
+    const {id, username, email, text, status, token, dispatch, error, sort_field, sort_direction, page} = props;
 
-    const changeStatus = () => {
-        if (status === 10) {
-            dispatch(edit_task_request({id, status: 0, token}));
-        } else {
-            dispatch(edit_task_request({id, status: 10, token}));
+    useEffect(() => {
+        setIsAdminChange(localStorage[`id${id}`] === id.toString());
+    });
+
+    const changeStatus = async() => {
+        const tokenValue = await getCookie("token");
+        if (tokenValue) {
+            if (status === 10) {
+                dispatch(edit_task_request([{id, status: 0, token}, {sort_field, sort_direction, page}]));
+            } else {
+                dispatch(edit_task_request([{id, status: 10, token}, {sort_field, sort_direction, page}]));
+            }
         }
     };
 
@@ -83,12 +108,27 @@ const ListItem: React.FC<Props> = props => {
                     ></button>
                 </div>
             </div>
-            <p className="item__text">
-                {text}
-                <span className="item__text-edit" onClick={openModal}></span>
-            </p>
+            <div className="item__text">
+                {   isAdminChange &&
+                    <p className="error">Редактировано администратором</p>
+                }
+                <p>{text}</p>
+                {token && <span className="item__text-edit" onClick={openModal}></span>}
+            </div>
 
-            {viewModal && <Modal text={text} openModal={openModal} id={id} token={token} dispatch={dispatch} error={error} />}
+            {
+                viewModal &&
+                <Modal
+                    text={text}
+                    openModal={openModal}
+                    id={id} token={token}
+                    dispatch={dispatch}
+                    error={error}
+                    sort_field={sort_field}
+                    sort_direction={sort_direction}
+                    page={page}
+                />
+            }
             <style jsx global>{`
                 .status {
                     width: 30px;
@@ -219,9 +259,18 @@ const ListItem: React.FC<Props> = props => {
 };
 
 const mapStateToProps = state => {
+    let errorMessage;
+    if (!state.auth.token) {
+        errorMessage = "Пожалуйста авторизуйтесь"
+    } else {
+        errorMessage = state.tasks.error
+    }
     return {
         token: state.auth.token,
-        error: state.tasks.error
+        error: errorMessage,
+        sort_field: state.filter.sort_field,
+        sort_direction: state.filter.sort_direction,
+        page: state.filter.page
     };
 };
 

@@ -45,7 +45,7 @@ const Authorization: React.FC<Props> = props => {
             <>
                 <div className="auth">
                     <form className="auth__form" onSubmit={auth}>
-                        {!token && <div>
+                        {!token && <div className="auth__fields">
                             <p>Авторизация</p>
                             {error && <p className="error-field-text">{error.username}</p>}
                             <input type="text" name="username" className="auth__field" ref={username} />
@@ -80,6 +80,10 @@ const Authorization: React.FC<Props> = props => {
                       display: flex;
                       flex-direction: column;
                       align-items: center;
+                    }
+                    
+                    .auth__fields {
+                        width: 100%;
                     }
                     
                     .auth__field {
