@@ -1,0 +1,116 @@
+@import "../_var.scss";
+
+.task-block {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(177,177,177,0.5);
+}
+
+.new-task {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  width: 400px;
+  padding: 15px;
+  box-shadow: $boxshadow;
+  bordr-radius: $radius;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  color: $mainColor;
+  text-align: center;
+
+  input {
+    width: 100%;
+    border: $border;
+    margin: 5px 0;
+    padding: 10px;
+  }
+
+  textarea {
+    min-height: 100px;
+    width: 100%;
+    border: $border;
+    margin: 5px 0;
+    padding: 10px;
+    resize: vertical;
+  }
+}
+
+// task-block__close
+.task-block__close{
+  position: absolute;
+  top: -17px;
+  right: -17px;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  border-radius: 50%;
+  background: #e62f57;
+  box-shadow: $shadow-hover;
+}
+
+.task-block__close:before,
+.task-block__close:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  width: 18px;
+  height: 4px;
+  background: #fff;
+}
+
+.task-block__close:before {
+  transform: translateY(-50%) translateX(-50%) rotate(45deg);
+}
+
+.task-block__close:after {
+  transform: translateY(-50%) translateX(-50%) rotate(-45deg);
+}
+
+.error-field-text {
+  color: red;
+  font-size: 12px;
+}
+
+.enter {
+  min-width: 130px;
+  display: inline-block;
+  background: #fff;
+  color: $mainColor;
+  padding: 15px 20px;
+  box-shadow: $boxshadow;
+  border-radius: $radius;
+  transition: 0.3s all;
+  font-size: 12px;
+
+  &:hover {
+    box-shadow: $shadow-hover;
+  }
+}
+
+.create-task-state {
+  margin-top: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

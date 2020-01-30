@@ -1,0 +1,27 @@
+@import "../_var.scss";
+
+.sort {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.select {
+  padding: 5px;
+  margin: 3px 0;
+  margin-right: 5px;
+  cursor: pointer;
+  border: $border;
+  border-radius: $radius;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+.sort__block {
+  display: flex;
+  flex-wrap: wrap;
+}

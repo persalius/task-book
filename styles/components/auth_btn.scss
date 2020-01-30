@@ -1,0 +1,15 @@
+@import "../_var.scss";
+
+.authorization {
+  display: inline-block;
+  background: #fff;
+  color: $mainColor;
+  padding: 15px 20px;
+  box-shadow: $boxshadow;
+  border-radius: $radius;
+  transition: 0.3s all;
+
+  &:hover {
+    box-shadow: $shadow-hover;
+  }
+}

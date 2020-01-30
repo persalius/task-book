@@ -1,0 +1,36 @@
+@import "../_var.scss";
+
+.item {
+  transition: 0.3s all;
+  border-radius: $radius;
+  border: $border;
+  margin-bottom: 10px;
+
+  &:hover {
+    box-shadow: $shadow-hover;
+    border-color: transparent;
+
+    .item__text-edit {
+      display: block;
+    }
+  }
+}
+
+.item__block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: $border;
+  padding: 15px;
+}
+
+.user {
+  color: $mainColor;
+  font-size: 14px;
+}
+
+.item__text {
+  padding: 15px;
+  padding-right: 45px;
+  position: relative;
+}

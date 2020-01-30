@@ -1,0 +1,45 @@
+@import "../_var.scss";
+
+.message {
+  min-width: 200px;
+  padding: 20px;
+  padding-right: 37px;
+  position: fixed;
+  bottom: 0;
+  left: 20px;
+  background: #272c34;
+  border-top-right-radius: $radius;
+  border-top-left-radius: $radius;
+  color: #fff;
+}
+
+.close{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+
+.close:before,
+.close:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  width: 10px;
+  height: 2px;
+  background: #fff;
+}
+
+.close:before {
+  transform: translateY(-50%) translateX(-50%) rotate(45deg);
+}
+
+.close:after {
+  transform: translateY(-50%) translateX(-50%) rotate(-45deg);
+}

@@ -1,0 +1,32 @@
+body {
+  background: #fafafa;
+  min-height: 100vh;
+  font-family: "roboto", sans-serif;
+}
+
+input, textarea {
+  font-family: "roboto", sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: grey;
+  font-family: "roboto", sans-serif;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: grey;
+  font-family: "roboto", sans-serif;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: grey;
+  font-family: "roboto", sans-serif;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: grey;
+  font-family: "roboto", sans-serif;
+}

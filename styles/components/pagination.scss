@@ -1,0 +1,27 @@
+@import "../_var.scss";
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pagination__btn {
+  width: 30px;
+  height: 30px;
+  box-shadow: $boxshadow;
+  transition: 0.3s all;
+  border-radius: $radius;
+  margin: 5px;
+  color: $mainColor;
+
+  &:hover {
+    box-shadow: $shadow-hover;
+  }
+}
+
+.pagination__btn-active {
+  background: $mainColor;
+  color: #fff;
+}
