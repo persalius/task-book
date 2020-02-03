@@ -47,7 +47,7 @@ function* editTask(state) {
     try {
         const {id, token} = state.payload[0];
         let form = new FormData();
-        if (state.payload[0].status) {
+        if (state.payload[0].status || state.payload[0].status === 0) {
             form.append("status", state.payload[0].status);}
         if (state.payload[0].text) {
             form.append("text", state.payload[0].text);
