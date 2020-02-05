@@ -1,4 +1,4 @@
-import { all, put, takeLatest } from 'redux-saga/effects';
+import { all, put, call, takeLatest } from 'redux-saga/effects';
 import types from "../constants/tasks";
 import * as actions from "../actions/tasks";
 import callApi from "../../utils/call-api";
@@ -18,7 +18,7 @@ function* loadTasks(state) {
         if (!state.isServer) {
             form = createFormForTasks(state);
         }
-        const data = yield callApi({form, getTasks: true}, null, "/");
+        const data = yield call(() => callApi({form, getTasks: true}, null, "/"));
         yield put(actions.tasks_success(data));
     } catch (error) {
         yield put(actions.tasks_failure(error.message));
@@ -34,7 +34,7 @@ function* createTask(state) {
         form.append("username", username);
         form.append("email", email);
         form.append("text", text);
-        const data = yield callApi(form, {method: "POST"}, "/create");
+        const data = yield call(() => callApi(form, {method: "POST"}, "/create"));
         yield put(actions.add_task_success(data));
         yield put(actions.tasks_request({sort_field, sort_direction, page}));
     } catch (error) {
@@ -54,7 +54,7 @@ function* editTask(state) {
         }
         form.append("token", token);
 
-        const data = yield callApi(form, {method: "POST"}, `/edit/${id}`);
+        const data = yield call(() => callApi(form, {method: "POST"}, `/edit/${id}`));
         yield put(actions.edit_task_success(data));
         yield put(actions.tasks_request({...state.payload[1]}));
     } catch (error) {

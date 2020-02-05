@@ -1,4 +1,4 @@
-import { all, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeLatest } from 'redux-saga/effects';
 import types from "../constants/auth";
 import * as actions from "../actions/auth";
 import callApi from "../../utils/call-api";
@@ -11,7 +11,7 @@ function* loadLogin(state) {
         let form = new FormData();
         form.append("username", username);
         form.append("password", password);
-        const data = yield callApi(form, {method: "POST"}, "/login");
+        const data = yield call(() => callApi(form, {method: "POST"}, "/login"));
         yield setCookie("token", data.token);
         yield put(actions.login_success(data));
     } catch (error) {

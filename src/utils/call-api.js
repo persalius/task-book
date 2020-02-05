@@ -1,5 +1,5 @@
 import axios from "axios";
-import config from "../config";
+import config from "../../config";
 
 export default function callApi(payload, options, endpoint, token) {
     const method = options && options.method ? options.method : "GET";
